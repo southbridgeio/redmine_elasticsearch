@@ -57,7 +57,7 @@ module ApplicationSearch
     # @return [Integer] errors count
     def import(options = {}, &block)
       # Batch size for bulk operations
-      batch_size = options.fetch(:batch_size, RedmineElasticsearch::BATCH_SIZE_FOR_IMPORT)
+      batch_size = options[:batch_size] || RedmineElasticsearch::BATCH_SIZE_FOR_IMPORT
 
       # Document type
       type = options.fetch(:type, document_type)

@@ -2,7 +2,7 @@ require 'elasticsearch'
 require 'elasticsearch/model'
 
 module RedmineElasticsearch
-  INDEX_NAME            = "#{Rails.application.class.parent_name.downcase}_#{Rails.env}"
+  INDEX_NAME            = "#{Rails.application.class.module_parent_name.downcase}_#{Rails.env}"
   BATCH_SIZE_FOR_IMPORT = 300
 
   def type2class_name(type)
@@ -53,22 +53,4 @@ module RedmineElasticsearch
   end
 
   extend self
-end
-
-%w{elastic serializers}.each do |fold|
-  fold_path                                  = File.dirname(__FILE__) + "/../app/#{fold}"
-  ActiveSupport::Dependencies.autoload_paths += [fold_path]
-  Rails.application.config.eager_load_paths += [fold_path]
-end
-
-require_dependency 'redmine_elasticsearch/patches/redmine_search_patch'
-require_dependency 'redmine_elasticsearch/patches/search_controller_patch'
-
-ActionDispatch::Callbacks.to_prepare do
-  RedmineElasticsearch.apply_patch RedmineElasticsearch::Patches::RedmineSearchPatch, Redmine::Search
-  RedmineElasticsearch.apply_patch RedmineElasticsearch::Patches::SearchControllerPatch, SearchController
-  RedmineElasticsearch.apply_patch RedmineElasticsearch::Patches::ResponseResultsPatch, Elasticsearch::Model::Response::Results
-
-  # Using plugin's configured client in all models
-  Elasticsearch::Model.client = RedmineElasticsearch.client
 end
