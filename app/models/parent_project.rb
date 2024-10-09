@@ -1,5 +1,7 @@
 # Parent project used for index and query issues, news, projects and etc with parent.
 class ParentProject < Project
+  include ApplicationSearch
+
   index_name RedmineElasticsearch::INDEX_NAME
 
   class << self
@@ -8,7 +10,7 @@ class ParentProject < Project
     # 'parent_project' is a project tree for all other items.
     def import(options={}, &block)
       # Batch size for bulk operations
-      batch_size = options.fetch(:batch_size, RedmineElasticsearch::BATCH_SIZE_FOR_IMPORT)
+      batch_size = options[:batch_size] || RedmineElasticsearch::BATCH_SIZE_FOR_IMPORT
 
       # Imported records counter
       imported   = 0
