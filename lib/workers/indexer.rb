@@ -42,7 +42,11 @@ module Workers
       document = klass.find id
       document.update_index
     rescue ActiveRecord::RecordNotFound
-      klass.remove_from_index id
+      begin
+        klass.remove_from_index id
+      rescue Elasticsearch::Transport::Transport::Errors::NotFound
+        # do nothing
+      end
     rescue Elasticsearch::Transport::Transport::Errors::NotFound
       # do nothing
     rescue Errno::ECONNREFUSED => e
