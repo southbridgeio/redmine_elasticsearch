@@ -8,12 +8,12 @@ module Workers
     class << self
       def defer(object_or_class)
         if object_or_class.is_a? Class
-          params = { type: object_or_class.document_type }
+          params = { 'type' => object_or_class.document_type }
           perform_async(params)
         elsif object_or_class.id?
           params = {
-            id:   object_or_class.id,
-            type: object_or_class.class.document_type
+            'id'   => object_or_class.id,
+            'type' => object_or_class.class.document_type
           }
           perform_async(params)
         end
