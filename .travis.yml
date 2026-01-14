@@ -9,10 +9,12 @@ rvm:
   - 2.3.6
   - 2.5.1
   - 2.7.2
+  - 3.3.10
 
 env:
   - REDMINE_VER=3.4-stable DB=postgresql
   - REDMINE_VER=5.1-stable DB=postgresql
+  - REDMINE_VER=6.1-stable DB=postgresql
 
 sudo: true
 addons:
